@@ -8,12 +8,14 @@ def lucky(dis):
     query = ' '.join(dis)
     try:
         luck = wikipedia.page(title=query)
-        print (luck.summary)
+        return luck.summary
     except wikipedia.exceptions.DisambiguationError:
-        # disambiguation
+        # many possible wiki pages
         e = sys.exc_info()
+        r = ""
         for ln in islice(e, 1, len(e) - 1):
-            print(ln, "\n")
+            r += str(ln) + "\n"
+        return r
 
 
 if __name__ == "__main__":
@@ -21,8 +23,12 @@ if __name__ == "__main__":
     if len(sys.argv) >= 2:
         if sys.argv[1] == "--help" or sys.argv[1] == "-h":
             print ("Ask me anything")
+        elif sys.argv[1] == "-r":
+            while True:
+                q = input("What are you looking for?\n").split()
+                print(lucky(q))
         else:
-            lucky(sys.argv[1:])
+            print(lucky(sys.argv[1:]))
     else:
         q = input("What are you looking for?\n").split()
         if q != "":
