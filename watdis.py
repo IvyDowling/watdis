@@ -4,7 +4,7 @@ import logging
 from itertools import islice
 
 
-def lucky(dis):
+def run(dis):
     query = ' '.join(dis)
     try:
         luck = wikipedia.page(title=query)
@@ -16,6 +16,8 @@ def lucky(dis):
         for ln in islice(e, 1, len(e) - 1):
             r += str(ln) + "\n"
         return r
+    except wikipedia.exceptions.PageError:
+        return "-No page found for that value"
 
 
 if __name__ == "__main__":
@@ -25,13 +27,18 @@ if __name__ == "__main__":
             print ("Ask me anything")
         elif sys.argv[1] == "-r":
             while True:
-                q = input("What are you looking for?\n").split()
-                print(lucky(q))
+                q = input("What are you looking for? ('quit' to exit)\n").split()
+                if (q[0] == "quit"):
+                    #end
+                    break
+                else:
+                    print(run(q))
+
         else:
-            print(lucky(sys.argv[1:]))
+            print(run(sys.argv[1:]))
     else:
         q = input("What are you looking for?\n").split()
         if q != "":
-            lucky(q)
+            run(q)
         else:
-            print("okay?")
+            print("so long!")
